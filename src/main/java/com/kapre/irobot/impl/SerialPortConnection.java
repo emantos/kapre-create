@@ -11,8 +11,9 @@ public class SerialPortConnection implements Connection {
   private SerialPort serialPort;
   private int recvTimeout;
 
-  public SerialPortConnection(String portAddress) {
+  public SerialPortConnection(String portAddress, int defaultTimeout) {
     serialPort = new SerialPort(portAddress);
+    recvTimeout = defaultTimeout;
   }
 
   public void open() {

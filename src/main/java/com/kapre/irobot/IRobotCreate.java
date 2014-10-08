@@ -21,7 +21,7 @@ public class IRobotCreate {
       if (response != null && response.length == command.getLengthResponse()) {
         return Optional.of(command.getResponse(response));
       } else {
-        // throw a Runtime Exception here
+        throw new RuntimeException("Response is null or not of expected length.");
       }
     }
 

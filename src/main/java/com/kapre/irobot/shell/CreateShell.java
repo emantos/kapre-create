@@ -2,14 +2,14 @@ package com.kapre.irobot.shell;
 
 import java.io.Console;
 
-import jssc.SerialPortException;
 import jssc.SerialPortList;
-import jssc.SerialPortTimeoutException;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.kapre.irobot.Command;
-import com.kapre.irobot.Executor;
+import com.kapre.irobot.Connection;
+import com.kapre.irobot.IRobotCreate;
+import com.kapre.irobot.SensorData;
 import com.kapre.irobot.enums.OpCode;
 import com.kapre.irobot.impl.BaudCommand;
 import com.kapre.irobot.impl.DemoCommand;
@@ -20,6 +20,7 @@ import com.kapre.irobot.impl.LowSideDriver;
 import com.kapre.irobot.impl.MoveToCommand;
 import com.kapre.irobot.impl.OpCommand;
 import com.kapre.irobot.impl.SensorCommand;
+import com.kapre.irobot.impl.SerialPortConnection;
 import com.kapre.irobot.impl.TurnCommand;
 import com.kapre.irobot.impl.WaitCommand;
 
@@ -32,22 +33,31 @@ public class CreateShell {
 
     Optional<String> serialPort = getSerialPort(console);
 
+    /* Bail out if no serial port is present */
     if (!serialPort.isPresent()) {
-      // TODO : bail out!
       console.printf("No serial port detected.\n");
+      return;
     }
 
-    Executor executor = new Executor();
+    Connection connection = new SerialPortConnection(serialPort.get(), DEFAULT_TIMEOUT);
+    IRobotCreate executor = new IRobotCreate(connection);
+    
     CommandInterpreter<Command> commandInterpreter = buildInterpreter();
     try {
-      executor.open(serialPort.get());
+      /* open connection to irobot */
+      executor.init();
+      
       while (true) {
+        /* read command */
         String cmd = console.readLine("> ");
+        
+        /* quit if given quit command */
         if (cmd.trim().equalsIgnoreCase("quit")) {
           break;
         }
 
         try {
+          /* Interpret command given and build Command object */
           Optional<? extends Command> result = commandInterpreter
               .interpret(cmd);
           if (!result.isPresent()) {
@@ -55,37 +65,31 @@ public class CreateShell {
             continue;
           }
 
+          /* execute command object */
           Command command = result.get();
-          executor.send(command);
-          if (command.isExpectResponse()) {
-            try {
-              byte[] response = executor.recv(command.getLengthResponse(),
-                  DEFAULT_TIMEOUT);
-              if (response != null) {
-                console.format("response: %s", command.getResponse(response)
-                    .toString());
-              }
-            } catch (SerialPortTimeoutException e) {
-              console.format("No response. Expecting response of length %d\n",
-                  command.getLengthResponse());
-            }
+          Optional<SensorData> response = executor.execute(command);
+          if(response.isPresent()) {
+            console.format("Command successful. Response: %s\n", response.get().toString());
           } else {
             console.format("Command successful.\n");
           }
-        } catch (InterpreterException e1) {
-          console.format("Exception : \n");
-          e1.printStackTrace(console.writer());
-          console.format("\n");
+        } catch (InterpreterException e) {
+          printException(console, e);
         }
       }
-
-    } catch (SerialPortException e) {
-      // TODO : handle
-    } finally {
-
-    }
+      executor.shutdown();
+    } catch (RuntimeException e) {
+      printException(console, e);
+    } 
+  }
+  
+  private static void printException(Console console, RuntimeException e) {
+    console.format("Exception : \n");
+    e.printStackTrace(console.writer());
+    console.format("\n");
   }
 
+  /* build our command interpreter */
   public static CommandInterpreter<Command> buildInterpreter() {
     CommandInterpreter<Command> interpreter = new CommandInterpreter<Command>();
     interpreter.add("start", null, OpCommand.class,
@@ -118,6 +122,7 @@ public class CreateShell {
     return interpreter;
   }
 
+  /* get list of serial ports and prompt user for selection */
   public static Optional<String> getSerialPort(Console console) {
     String[] portNames = SerialPortList.getPortNames();
     if (portNames.length > 0) {

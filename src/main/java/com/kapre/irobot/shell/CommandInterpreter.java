@@ -96,13 +96,13 @@ public class CommandInterpreter<K> {
     Scanner scanner = new Scanner(command);
     String commandName = scanner.next();
 
-    // create parameters and parameter types and add default
+    /* get default parameters and default parameter types for command */
     List<Class<?>> parameterTypes = Lists
         .newArrayList(getDefaultParameterTypesForCommand(commandName));
     List<Object> parameters = Lists
         .newArrayList(getDefaultParametersForCommand(commandName));
 
-    // get parameters for command along with parameter types
+    /* if command given has parameters, get the parameters in the command string */
     if (scanner.hasNext()) {
       List<ParameterType> paramTypes = commandParamTypeMap.get(commandName);
       if (paramTypes != null) {
@@ -113,12 +113,13 @@ public class CommandInterpreter<K> {
       }
     }
 
-    // instantiate class
+    /* get the command class for the given command name so we can instantiate it. */
     Class<? extends K> resultClass = commandResultClassMap.get(commandName);
     if (resultClass == null) {
       return Optional.absent();
     }
 
+    /* instantiate class by using constructors */
     try {
       Constructor<? extends K> constructor = resultClass
           .getConstructor(parameterTypes.toArray(new Class<?>[parameterTypes

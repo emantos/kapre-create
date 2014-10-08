@@ -1,6 +1,6 @@
 package com.kapre.irobot.shell;
 
-public class InterpreterException extends Exception {
+public class InterpreterException extends RuntimeException {
   /**
    * 
    */
