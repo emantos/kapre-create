@@ -7,8 +7,14 @@ My testing device is a raspberry pi connected to the irobot create via the UART 
 
 How to Use
 ==========
-<write documentation on how to use the API here>
+
+1. Connect the serial usb cable from computer to robot.
+2. Build the source code [ mvn clean package ]
+3. Run the shell [ java -jar target/irobotcreate-1.0-SNAPSHOT-jar-with-dependencies.jar ]
+4. Choose with serial port to use.
 
 The Shell
 =========
-<write documentation about the default shell here>
+
+* The first command to be sent should be [ start ] followed by [ safe ] or [ full ]
+* [ moveto 200 100 ] moves the robot 200mm forward with 100mm/sec velocity
