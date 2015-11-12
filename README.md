@@ -17,4 +17,5 @@ The Shell
 =========
 
 * The first command to be sent should be [ start ] followed by [ safe ] or [ full ]
-* [ moveto 200 100 ] moves the robot 200mm forward with 100mm/sec velocity
+* [ moveto 2000 100 ] moves the robot 2000mm forward with 100mm/sec velocity
+* [ turn 180 50 ] Turn-around using 50mm/sec velocity
