@@ -11,7 +11,7 @@ How to Use
 1. Connect the serial usb cable from computer to robot.
 2. Build the source code [ mvn clean package ]
 3. Run the shell [ java -jar target/irobotcreate-1.0-SNAPSHOT-jar-with-dependencies.jar ]
-4. Choose with serial port to use.
+4. Choose which serial port to use.
 
 The Shell
 =========
