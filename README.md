@@ -9,13 +9,13 @@ How to Use
 ==========
 
 1. Connect the serial usb cable from computer to robot.
-2. Build the source code [ mvn clean package ]
-3. Run the shell [ java -jar target/irobotcreate-1.0-SNAPSHOT-jar-with-dependencies.jar ]
+2. Build the source code <code>mvn clean package</code>
+3. Run the shell <code>java -jar target/irobotcreate-1.0-SNAPSHOT-jar-with-dependencies.jar</code>
 4. Choose which serial port to use.
 
 The Shell
 =========
 
-* The first command to be sent should be [ start ] followed by [ safe ] or [ full ]
-* [ moveto 2000 100 ] moves the robot 2000mm forward with 100mm/sec velocity
-* [ turn 180 50 ] Turn-around using 50mm/sec velocity
+* The first command to be sent should be <code>start</code> followed by <code>safe</code> or <code>full</code>
+* <code>moveto 2000 100</code> moves the robot 2000mm forward with 100mm/sec velocity
+* <code>turn 180 50</code> Turn-around using 50mm/sec velocity
