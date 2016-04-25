@@ -26,7 +26,7 @@ import com.kapre.irobot.impl.WaitCommand;
 
 public class CreateShell {
 
-  private static final int DEFAULT_TIMEOUT = 10;
+  private static final int DEFAULT_TIMEOUT = 10000;
 
   public static void main(String[] args) {
     Console console = System.console();
