@@ -20,7 +20,6 @@ import com.kapre.irobot.impl.LowSideDriver;
 import com.kapre.irobot.impl.MoveToCommand;
 import com.kapre.irobot.impl.OpCommand;
 import com.kapre.irobot.impl.SensorCommand;
-import com.kapre.irobot.impl.SerialPortConnection;
 import com.kapre.irobot.impl.TurnCommand;
 import com.kapre.irobot.impl.WaitCommand;
 
