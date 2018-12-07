@@ -1,3 +1,10 @@
+Deprecated
+==========
+
+Newer version of this project is available in 
+
+[The IRobotCreate Project] (https://github.com/emantos/irobotcreate)
+
 kapre-create
 ============
 
